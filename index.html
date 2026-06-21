@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>누구나 시인 - 매일의 감정을 시로 기록하다</title>
+    <!-- Google Fonts: Noto Serif KR & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for clean aesthetic icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Midnight starry background animations -->
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <!-- Main Container -->
+    <div id="app">
+        <!-- 1. LANDING PAGE -->
+        <section id="landing-page" class="page-section active">
+            <div class="landing-container glass-card">
+                <div class="poetic-intro">
+                    <span class="intro-sub animate-fade">매일 주어지는 감정의 언어</span>
+                    <h1 class="intro-title animate-title">누구나 시인</h1>
+                    <p class="intro-desc animate-fade-delayed">
+                        하루에 단 한 번, 주어진 감정으로 마음을 기록합니다.<br>
+                        작성한 시는 오늘 밤이 지나면 1년 동안 봉인됩니다.<br>
+                        그리고 1년 뒤 오늘, 과거의 나에게 답시를 선물하세요.
+                    </p>
+                </div>
+                <div class="landing-actions animate-fade-delayed">
+                    <button id="btn-go-auth" class="btn-primary">
+                        <i data-lucide="feather" class="icon-spacing"></i>나의 시 쓰기 시작하기
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. AUTH PAGE (Login / Signup) -->
+        <section id="auth-page" class="page-section">
+            <div class="auth-container glass-card">
+                <div class="auth-header">
+                    <h2 id="auth-title">마음의 문을 열다</h2>
+                    <p id="auth-subtitle">시를 쓰기 위해 로그인 또는 회원가입을 해주세요.</p>
+                </div>
+
+                <!-- Tab switching for Login/Signup -->
+                <div class="auth-tabs">
+                    <button id="tab-login" class="auth-tab-btn active">로그인</button>
+                    <button id="tab-signup" class="auth-tab-btn">회원가입</button>
+                </div>
+
+                <!-- Auth Form -->
+                <form id="auth-form" class="auth-form" onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <label for="auth-username">필명 (아이디)</label>
+                        <input type="text" id="auth-username" required placeholder="시인의 필명을 입력해 주세요" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="auth-password">비밀번호</label>
+                        <input type="password" id="auth-password" required placeholder="비밀번호를 입력해 주세요" autocomplete="current-password">
+                    </div>
+                    <div class="form-group signup-only hidden">
+                        <label for="auth-signup-date">가입 시간 설정 (테스트용)</label>
+                        <input type="date" id="auth-signup-date" class="sim-date-input">
+                        <small class="form-help">설정하지 않으면 오늘 날짜로 가입됩니다.</small>
+                    </div>
+                    <button type="submit" id="btn-auth-submit" class="btn-primary btn-block">로그인</button>
+                </form>
+                
+                <button id="btn-back-landing" class="btn-text">
+                    <i data-lucide="arrow-left" class="icon-spacing"></i>처음으로 돌아가기
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. MAIN DASHBOARD PAGE (After Auth) -->
+        <section id="main-page" class="page-section">
+            <!-- Header Navigation -->
+            <header class="main-header glass-card">
+                <div class="header-logo">
+                    <i data-lucide="feather" class="logo-icon"></i>
+                    <span class="logo-text">누구나 시인</span>
+                </div>
+                <div class="user-meta">
+                    <span id="user-info" class="user-info-text"><strong id="display-name">시인</strong>님</span>
+                    <span id="user-tier" class="badge-tier">1년 차 시인</span>
+                    <button id="btn-logout" class="btn-icon-text" title="로그아웃">
+                        <i data-lucide="log-out"></i>
+                        <span class="btn-label">떠나기</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Navigation Tabs -->
+            <nav class="dashboard-tabs">
+                <button id="nav-write" class="tab-btn active">
+                    <i data-lucide="pen-tool"></i>오늘의 시
+                </button>
+                <button id="nav-archive" class="tab-btn">
+                    <i data-lucide="book-open"></i>나의 시집
+                </button>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="dashboard-content">
+                <!-- 3a. TODAY WRITING TAB -->
+                <div id="write-tab-content" class="tab-pane active">
+                    <!-- Standard 1st Year Write View -->
+                    <div id="single-editor-view" class="editor-layout active">
+                        <div class="editor-header glass-card">
+                            <span class="editor-theme-label">오늘의 감정 단어</span>
+                            <h2 id="today-emotion-word" class="emotion-word">...</h2>
+                            <p class="emotion-guide">이 감정에 귀를 기울여 한 편의 시를 지어주세요.</p>
+                            <div class="day-counter-badge">가입 <span id="days-count">1</span>일 차</div>
+                        </div>
+
+                        <div class="editor-body glass-card">
+                            <!-- Already written info overlay -->
+                            <div id="written-blocker" class="written-overlay hidden">
+                                <div class="overlay-content">
+                                    <i data-lucide="lock" class="overlay-icon"></i>
+                                    <h3>오늘의 감정을 이미 기록하셨습니다</h3>
+                                    <p>작성하신 시는 오늘 밤 11시 59분 59초까지만 수정/조회할 수 있습니다.</p>
+                                    <button id="btn-view-written" class="btn-secondary">내가 쓴 시 감상하기</button>
+                                </div>
+                            </div>
+
+                            <!-- Real editor -->
+                            <div class="poem-composer">
+                                <div class="composer-title-wrapper">
+                                    <input type="text" id="poem-title" placeholder="시의 제목을 적어주세요" class="poem-title-input">
+                                </div>
+                                <div class="composer-content-wrapper">
+                                    <textarea id="poem-content" placeholder="이곳에 감정을 쏟아 시를 지어주세요...&#10;여백과 줄바꿈을 자유롭게 활용해 보세요." class="poem-textarea"></textarea>
+                                </div>
+                                <div class="composer-footer">
+                                    <div class="autosave-status">
+                                        <i data-lucide="refresh-cw" class="spinner hidden" id="save-spinner"></i>
+                                        <span id="save-status-text">내용이 변경되면 자동 저장됩니다 (3초)</span>
+                                    </div>
+                                    <button id="btn-publish-poem" class="btn-publish">
+                                        <i data-lucide="check"></i> 오늘의 시 발행하기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dual 2nd Year Write/Reply View -->
+                    <div id="dual-editor-view" class="editor-layout">
+                        <div class="dual-editor-container">
+                            <!-- Left: 1 year ago raw poem (Locked, but now unlocked for response) -->
+                            <div class="dual-panel past-panel glass-card">
+                                <div class="panel-header">
+                                    <div class="panel-tag">1년 전 오늘</div>
+                                    <h3 class="past-date-label" id="past-date">2025년 6월 21일</h3>
+                                    <div class="past-emotion-tag">주제어: <strong id="past-emotion">그리움</strong></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="past-poem-display">
+                                        <h4 id="past-poem-title" class="past-title">...</h4>
+                                        <div id="past-poem-content" class="past-content">...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Today's Reply Writer -->
+                            <div class="dual-panel present-panel glass-card">
+                                <!-- Already written reply blocker -->
+                                <div id="reply-written-blocker" class="written-overlay hidden">
+                                    <div class="overlay-content">
+                                        <i data-lucide="lock" class="overlay-icon"></i>
+                                        <h3>오늘의 답시를 이미 기록하셨습니다</h3>
+                                        <p>작성하신 답시는 오늘 밤 11시 59분 59초까지만 수정/조회할 수 있습니다.</p>
+                                    </div>
+                                </div>
+
+                                <div class="panel-header">
+                                    <div class="panel-tag present">오늘의 답시</div>
+                                    <h3 class="present-date-label" id="present-date">2026년 6월 21일</h3>
+                                    <div class="autosave-status">
+                                        <i data-lucide="refresh-cw" class="spinner hidden" id="reply-save-spinner"></i>
+                                        <span id="reply-save-status-text">자동 저장 활성화</span>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="reply-composer">
+                                        <textarea id="reply-poem-content" placeholder="1년 전 과거의 나에게 답하는 시를 지어주세요...&#10;정서적 성찰과 대화를 나누어 보세요." class="reply-textarea"></textarea>
+                                        <div class="reply-composer-footer">
+                                            <button id="btn-publish-reply" class="btn-publish">
+                                                <i data-lucide="check"></i> 오늘의 답시 발행하기
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3b. ARCHIVE TAB -->
+                <div id="archive-tab-content" class="tab-pane">
+                    <div class="archive-header glass-card">
+                        <h2>나의 시집</h2>
+                        <p>내가 기록한 감정의 궤적들입니다. 밤 12시가 지난 글들은 봉인되어 열람할 수 없으며, 정확히 1년 뒤 오늘 답시와 함께 다시 열립니다.</p>
+                    </div>
+                    <div id="archive-list" class="archive-grid">
+                        <!-- Cards will be dynamically rendered here -->
+                        <div class="empty-archive">
+                            <i data-lucide="book" class="empty-icon"></i>
+                            <p>아직 작성된 시가 없습니다. 오늘의 시를 먼저 써보세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- 4. DEVELOPER SIMULATOR PANEL (Floating overlay) -->
+        <div id="simulator-widget" class="simulator-closed">
+            <button id="btn-toggle-simulator" class="btn-sim-toggle" title="개발자 데모 시뮬레이터 열기">
+                <i data-lucide="sliders"></i>
+                <span class="sim-tooltip">시뮬레이터</span>
+            </button>
+            
+            <div class="simulator-content glass-card">
+                <h3>🛠️ 누구나 시인 데모 시뮬레이터</h3>
+                <p class="sim-guide">시간 제약 조건(당일 잠금, 1년 뒤 답시)을 즉석에서 검증할 수 있는 개발용 도구입니다.</p>
+                
+                <div class="sim-form-group">
+                    <label>가상 시스템 현재 시간</label>
+                    <input type="datetime-local" id="sim-current-time" class="sim-input">
+                    <div class="sim-preset-buttons">
+                        <button type="button" id="btn-sim-now" class="btn-sim-mini">현재 시간</button>
+                        <button type="button" id="btn-sim-midnight" class="btn-sim-mini">오늘 밤 23:59:50</button>
+                        <button type="button" id="btn-sim-tomorrow" class="btn-sim-mini">내일로 변경 (+1일)</button>
+                    </div>
+                </div>
+
+                <div class="sim-form-group">
+                    <label>내 계정 가입 날짜</label>
+                    <input type="date" id="sim-signup-date" class="sim-input">
+                    <div class="sim-preset-buttons">
+                        <button type="button" id="btn-sim-signup-today" class="btn-sim-mini">오늘 가입</button>
+                        <button type="button" id="btn-sim-signup-year1" class="btn-sim-mini">30일 전 가입</button>
+                        <button type="button" id="btn-sim-signup-year2" class="btn-sim-mini">365일 전 가입 (2년차)</button>
+                    </div>
+                </div>
+
+                <div class="sim-info-box">
+                    <div><strong>계산된 시점 상태:</strong></div>
+                    <div>현재 시간: <span id="sim-val-now" class="sim-highlight">-</span></div>
+                    <div>가입 일자: <span id="sim-val-signup" class="sim-highlight">-</span></div>
+                    <div>가입 후 경과: <span id="sim-val-days" class="sim-highlight">-</span>일 차 (<span id="sim-val-tier" class="sim-highlight">-</span>)</div>
+                </div>
+
+                <div class="sim-actions">
+                    <button id="btn-reset-simulator" class="btn-sim-reset">데이터 전체 초기화</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals (e.g. for viewing locked details page or alert) -->
+    <div id="modal-viewer" class="modal-overlay hidden">
+        <div class="modal-content glass-card">
+            <button id="btn-close-modal" class="btn-modal-close"><i data-lucide="x"></i></button>
+            <div class="modal-header">
+                <span id="modal-tag" class="modal-tag">1년 차 시인</span>
+                <span id="modal-date" class="modal-date">2026.06.21</span>
+            </div>
+            <div class="modal-body">
+                <div id="modal-lock-indicator" class="lock-indicator-large">
+                    <i data-lucide="lock" class="lock-icon-lg animate-pulse"></i>
+                    <h3>이 시는 봉인되었습니다</h3>
+                    <p>당일 열람 제약으로 인해 지금은 읽을 수 없습니다.<br>가입일로부터 365일 뒤인 <span id="modal-unlock-date" class="highlight-date">2027.06.21</span>에 봉인이 풀리고 답시를 작성할 수 있게 됩니다.</p>
+                    <div class="countdown-container">
+                        남은 시간: <span id="modal-countdown" class="countdown-val">365일 00시간</span>
+                    </div>
+                </div>
+                <div id="modal-poem-content" class="poem-viewer-content hidden">
+                    <h2 id="modal-poem-title" class="modal-title">시의 제목</h2>
+                    <div id="modal-poem-body" class="modal-body-text">시의 내용</div>
+                    <hr class="modal-divider hidden" id="modal-divider">
+                    <div id="modal-reply-section" class="modal-reply-body hidden">
+                        <h4 class="reply-title"><i data-lucide="message-square"></i> 1년 뒤 작성한 답시</h4>
+                        <div id="modal-reply-body-text" class="modal-body-text reply">답시 내용</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

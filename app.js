@@ -133,6 +133,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initApp() {
+    // URL 쿼리에 admin=true가 있을 때만 시뮬레이터 위젯을 보여줍니다.
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('admin') === 'true';
+    const simWidget = document.getElementById('simulator-widget');
+    if (simWidget) {
+        if (isAdmin) {
+            simWidget.style.setProperty('display', 'flex', 'important');
+        } else {
+            simWidget.style.setProperty('display', 'none', 'important');
+        }
+    }
+
     // Load active session
     const savedSession = localStorage.getItem('poet_session');
     if (savedSession) {

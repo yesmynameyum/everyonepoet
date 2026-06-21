@@ -1149,7 +1149,7 @@ h1, h2, h3, h4, .poem-title-input, .past-title, .emotion-word {
     bottom: 20px;
     right: 20px;
     z-index: 90;
-    display: flex;
+    display: none; /* Hidden by default */
     align-items: flex-end;
     gap: 15px;
 }
